@@ -105,3 +105,8 @@ variable "logging_options" {
   type = "map"
   description = ""
 }
+
+variable "docker_labels" {
+  default     = {}
+  description = "a map of the labels to set on the docker container"
+}

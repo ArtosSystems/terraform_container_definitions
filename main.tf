@@ -182,6 +182,13 @@ data "template_file"  "_log_configuration" {
   }
 }
 
+# create the docker_labels
+
+data "template_file" "_docker_labels" {
+  # Will become an empty string
+  template = "${jsonencode("dockerLabels")}: ${jsonencode(var.docker_labels)}"
+}
+
 # Builds the final rendered dict
 # Ideally, this would cat the dict out through jq and ensure that it's a valid
 # JSON blob, but doing so may not be a reasonable (or even easy) action to 
@@ -213,6 +220,7 @@ JSON
             ? "${jsonencode("logConfiguration")}: ${data.template_file._log_configuration.rendered}"
             : ""
             }",
+          "${length(var.docker_labels) > 0 ? data.template_file._docker_labels.rendered : "" }",
           )
         )
       )}"
