@@ -209,6 +209,7 @@ JSON
           "${jsonencode("image")}: ${jsonencode(var.image)}",
           "${var.cpu != "" ? "${jsonencode("cpu")}: ${var.cpu}" : "" }",
           "${var.memory != "" ? "${jsonencode("memory")}: ${var.memory}" : "" }",
+          "${var.memoryReservation != "" ? "${jsonencode("memoryReservation")}: ${var.memoryReservation}" : "" }",
           "${var.essential != "" ? data.template_file.essential.rendered : ""}",
           "${length(var.links) > 0 ? "${jsonencode("links")}: ${jsonencode(var.links)}" : ""}",
           "${length(var.port_mappings) > 0 ?  data.template_file._port_mappings.rendered : ""}",

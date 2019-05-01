@@ -16,6 +16,11 @@ variable "memory" {
   description = ""
 }
 
+variable "memoryReservation" {
+  default     = ""
+  description = ""
+}
+
 variable "cpu" {
   default     = ""
   description = ""
