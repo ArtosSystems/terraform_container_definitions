@@ -1,7 +1,7 @@
 # This is done because boolean values cross the module boundary as 0 and 1,
 # So we need to cheaply cast it back to the literal of `false` and `true`
 
-data "template_file" "essential" {
+data "template_file" essential {
   template = "$${jsonencode("essential")}: $${val ? true : false}"
 
   vars = {
