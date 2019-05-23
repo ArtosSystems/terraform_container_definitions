@@ -2,7 +2,7 @@
 # So we need to cheaply cast it back to the literal of `false` and `true`
 
 data "template_file" "essential" {
-  template = "${jsonencode("essential")}: value ? true : false"
+  template = "${jsonencode("essential")}: $${value ? true : false}"
 
   vars = {
     value = "${var.essential != "" ? var.essential : "false"}"
