@@ -29,7 +29,7 @@ data "template_file" "_port_mapping" {
 )}}
 JSON
 
-  vars {
+  vars = {
     hostPort = "${ lookup(var.port_mappings[count.index], "host_port", "") }"
 
     # So that TF will throw an error - this is a required field
@@ -45,7 +45,7 @@ data "template_file" "_port_mappings" {
 "portMappings": [$${ports}]
 JSON
 
-  vars {
+  vars = {
     ports = "${join(",",data.template_file._port_mapping.*.rendered)}"
   }
 }
@@ -96,7 +96,7 @@ data "template_file" "_mount_keys" {
 )}}
 JSON
 
-  vars {
+  vars = {
     sourceVolume  = "${lookup(var.mount_points[count.index], "source_volume")}"
     containerPath = "${lookup(var.mount_points[count.index], "container_path")}"
     read_only     = "${lookup(var.mount_points[count.index], "read_only", "")}"
@@ -201,7 +201,7 @@ data "template_file" "_final" {
   }
 JSON
 
-  vars {
+  vars = {
     val = "${join(",",
       compact(
         list(
