@@ -2,10 +2,10 @@
 # So we need to cheaply cast it back to the literal of `false` and `true`
 
 data "template_file" "essential" {
-  template = "$${jsonencode("essential")}: $${val ? true : false}"
+  template = "${jsonencode("essential")}: value ? true : false"
 
-  vars {
-    val = "${var.essential != "" ? var.essential : "false"}"
+  vars = {
+    value = "${var.essential != "" ? var.essential : "false"}"
   }
 }
 
@@ -29,7 +29,7 @@ data "template_file" "_port_mapping" {
 )}}
 JSON
 
-  vars {
+  vars = {
     hostPort = "${ lookup(var.port_mappings[count.index], "host_port", "") }"
 
     # So that TF will throw an error - this is a required field
@@ -45,7 +45,7 @@ data "template_file" "_port_mappings" {
 "portMappings": [$${ports}]
 JSON
 
-  vars {
+  vars = {
     ports = "${join(",",data.template_file._port_mapping.*.rendered)}"
   }
 }
@@ -63,7 +63,7 @@ data "template_file" "_environment_keys" {
 }
 JSON
 
-  vars {
+  vars = {
     name  = "${jsonencode( element(keys(var.environment), count.index) )}"
     value = "${jsonencode( lookup(var.environment, element(keys(var.environment), count.index)) )}"
   }
@@ -74,7 +74,7 @@ data "template_file" "_environment_list" {
   "environment": [$${environment}]
 JSON
 
-  vars {
+  vars = {
     environment = "${join(",",data.template_file._environment_keys.*.rendered)}"
   }
 }
@@ -96,7 +96,7 @@ data "template_file" "_mount_keys" {
 )}}
 JSON
 
-  vars {
+  vars = {
     sourceVolume  = "${lookup(var.mount_points[count.index], "source_volume")}"
     containerPath = "${lookup(var.mount_points[count.index], "container_path")}"
     read_only     = "${lookup(var.mount_points[count.index], "read_only", "")}"
@@ -110,7 +110,7 @@ data "template_file" "_mount_list" {
 "mountPoints": [$${mounts}]
 JSON
 
-  vars {
+  vars = {
     mounts = "${join(",",data.template_file._mount_keys.*.rendered)}"
   }
 }
@@ -131,7 +131,7 @@ data "template_file" "_volumes_from_keys" {
 )}}
 JSON
 
-  vars {
+  vars = {
     sourceContainer = "${lookup(var.volumes_from[count.index], "source_container")}"
     read_only       = "${lookup(var.volumes_from[count.index], "read_only", "")}"
   }
@@ -145,14 +145,14 @@ data "template_file" "_volumes_from_list" {
 "volumesFrom": [$${volumes}]
 JSON
 
-  vars {
+  vars = {
     volumes = "${join(",",data.template_file._volumes_from_keys.*.rendered)}"
   }
 }
 
 data "template_file" "_log_configuration_driver" {
   template = "$${driver}"
-  vars {
+  vars = {
     driver = "${ length(var.logging_driver) > 0
       ? "${jsonencode("logDriver")}: ${ jsonencode(var.logging_driver) }"
       : ""
@@ -170,7 +170,7 @@ data "template_file" "_log_configuration_options" {
 
 data "template_file"  "_log_configuration" {
   template = "{$${configuration}}"
-  vars {
+  vars = {
     configuration = "${join(",",
         compact(
           list(
@@ -201,7 +201,7 @@ data "template_file" "_final" {
   }
 JSON
 
-  vars {
+  vars = {
     val = "${join(",",
       compact(
         list(
